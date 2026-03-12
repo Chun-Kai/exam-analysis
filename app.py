@@ -158,11 +158,11 @@ def fmt(val, decimals=1):
 
 
 def make_svg(values, labels, color, lower_is_better=False, width=260, height=100):
-    pad_l, pad_r, pad_t, pad_b = 10, 10, 18, 18
+    pad_l, pad_r, pad_t, pad_b = 30, 30, 18, 18
     chart_w, chart_h = width - pad_l - pad_r, height - pad_t - pad_b
     valid = [(i, v) for i, v in enumerate(values) if not pd.isna(v)]
     if not valid:
-        return f'<svg width="{width}" height="{height}"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#aaa" font-size="11">無資料</text></svg>'
+        return f'<svg viewBox="0 0 {width} {height}" width="100%"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#aaa" font-size="11">無資料</text></svg>'
     vals = [v for _, v in valid]
     vmin, vmax = min(vals), max(vals)
     if vmin == vmax:
@@ -183,7 +183,7 @@ def make_svg(values, labels, color, lower_is_better=False, width=260, height=100
         dots += f'<text x="{x:.1f}" y="{ly:.1f}" text-anchor="middle" font-size="10" fill="{color}" font-weight="600">{fmt(v)}</text>'
     xlbls = ''.join(f'<text x="{xs[i]:.1f}" y="{height-2}" text-anchor="middle" font-size="10" fill="#888">{lb}</text>'
                     for i, lb in enumerate(labels))
-    return f'<svg width="{width}" height="{height}" xmlns="http://www.w3.org/2000/svg"><polyline points="{polyline}" fill="none" stroke="{color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>{dots}{xlbls}</svg>'
+    return f'<svg viewBox="0 0 {width} {height}" width="100%" xmlns="http://www.w3.org/2000/svg"><polyline points="{polyline}" fill="none" stroke="{color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>{dots}{xlbls}</svg>'
 
 
 CSS = """
@@ -206,8 +206,9 @@ CSS = """
   .up { color: #e05c5c; font-weight: 700; }
   .down { color: #27ae60; font-weight: 700; }
   .flat { color: #888; }
-  .charts-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
-  .chart-item { background: #f9faff; border: 1px solid #e8ecff; border-radius: 8px; padding: 8px 10px 4px; flex: 1; min-width: 120px; }
+  .charts-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .chart-item { background: #f9faff; border: 1px solid #e8ecff; border-radius: 8px; padding: 8px 8px 4px; flex: 1 1 140px; min-width: 0; overflow: hidden; }
+  .chart-item svg { display: block; width: 100%; }
   .chart-title { font-size: 12px; font-weight: 700; margin-bottom: 4px; text-align: center; }
   .note { font-size: 11px; color: #999; margin-top: 16px; text-align: right; }
   .note span { color: #e05c5c; font-weight: 600; }
